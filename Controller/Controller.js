@@ -159,7 +159,7 @@ const createorder=async(req,res)=>{
      const data=await ordermodel.create(ord[co])
      co+=1
   }
-  res.json({m:'s')
+  res.json({m:'s'})
 
 }
 const getorder=async(req,res)=>{
