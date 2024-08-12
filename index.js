@@ -6,8 +6,11 @@ const router=require('./Routes/Routes')
 
 
 app.use(express.json())
-app.use(cors())
-
+app.use(cors({
+  origin: 'https://ecomerce-mern-royo.vercel.app', // allow this specific origin
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // specify the allowed methods
+  credentials: true // allow cookies to be sent
+}));
 app.use("/product",router)
 app.get("/",async(req,res)=>{
     res.json("hi")
