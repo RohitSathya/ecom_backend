@@ -3,6 +3,7 @@ const cors=require('cors')
 const app=express()
 const mongoose=require('mongoose')
 const router=require('./Routes/Routes')
+const pr=require('./Routes/productRoutes')
 
 
 app.use(express.json())
@@ -18,6 +19,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/product",router)
+app.use('/pro',pr)
 app.get("/",async(req,res)=>{
     res.json("hi")
 })
