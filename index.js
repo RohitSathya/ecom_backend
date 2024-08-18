@@ -5,20 +5,21 @@ const mongoose = require('mongoose');
 const router = require('./Routes/Routes');
 const pr = require('./Routes/productRoutes');
 
+// Middleware to parse JSON bodies
 app.use(express.json());
 
+// CORS Configuration
+const corsOptions = {
+  origin: 'https://explorepricing.com',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+};
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://explorepricing.com');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-  next();
-});
+// Use CORS middleware with the specified options
+app.use(cors(corsOptions));
 
+// Routes
 app.use("/product", router);
 app.use('/pro', pr);
 
@@ -26,8 +27,12 @@ app.get("/", async (req, res) => {
   res.json("hi");
 });
 
+// Connect to MongoDB and start the server
 mongoose.connect("mongodb+srv://admin:sunsetwest1234RRR@royoapi.3qmdrjq.mongodb.net/ecomeerce?retryWrites=true&w=majority")
   .then(() => {
-    console.log('database connected');
-    app.listen(8081, () => console.log('running'));
+    console.log('Database connected');
+    app.listen(8081, () => console.log('Server is running on port 8081'));
+  })
+  .catch(err => {
+    console.error('Failed to connect to the database', err);
   });
