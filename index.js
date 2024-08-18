@@ -5,12 +5,11 @@ const mongoose = require('mongoose');
 const router = require('./Routes/Routes');
 const pr = require('./Routes/productRoutes');
 
-// Middleware to parse JSON bodies
 app.use(express.json());
 
 // CORS Configuration
 const corsOptions = {
-  origin: 'https://explorepricing.com',
+  origin: ['https://explorepricing.com', 'https://www.explorepricing.com'], // Allow both domains
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
