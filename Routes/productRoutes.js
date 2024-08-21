@@ -19,7 +19,7 @@ router.get('/all', async (req, res) => {
     const products = await Product.find();
     res.json(products);
   } catch (err) {
-    res.status(400).json({ error: 'Error fetching products' });
+    res.status(400).json({ error: 'Error fetching products'});
   }
 });
 
