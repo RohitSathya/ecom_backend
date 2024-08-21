@@ -4,7 +4,7 @@ const productSchema = new mongoose.Schema({
   name: String,
   category: String,
   price: String,
-  image: String,
+  images: [String], // Changed from a single image to an array of images
   description: String,
   brand: String,
   rating: Number,
