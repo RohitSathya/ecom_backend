@@ -4,6 +4,7 @@ const app = express();
 const mongoose = require('mongoose');
 const router = require('./Routes/Routes');
 const pr = require('./Routes/productRoutes');
+require('dotenv').config();
 
 app.use(express.json());
 
@@ -27,7 +28,7 @@ app.get("/", async (req, res) => {
 });
 
 // Connect to MongoDB and start the server
-mongoose.connect("mongodb+srv://admin:sunsetwest1234RRR@royoapi.3qmdrjq.mongodb.net/ecomeerce?retryWrites=true&w=majority")
+mongoose.connect(process.env.mongo_url)
   .then(() => {
     console.log('Database connected');
     app.listen(8081, () => console.log('Server is running on port 8081'));
