@@ -10,7 +10,7 @@ app.use(express.json());
 
 // CORS Configuration
 const corsOptions = {
-  origin: ['https://explorepricing.com', 'https://www.explorepricing.com','https://ecomerce-mern-royo.vercel.app',https://ecomerce-1-2b9c.vercel.app], // Allow both domains
+  origin: ['https://explorepricing.com', 'https://www.explorepricing.com','https://ecomerce-mern-royo.vercel.app','https://ecomerce-1-2b9c.vercel.app'], // Allow both domains
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
