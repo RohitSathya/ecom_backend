@@ -13,6 +13,10 @@ router.put('/updateaddress/:id/:name/:phoneno/:area/:pincode/:landmark',controll
 router.delete('/dcart/:id',controller.cartafterorder)
 router.post('/order',controller.createorder)
 router.get('/getorder/:id',controller.getorder)
+router.get('/getallorders',controller.getallorders)
+router.get('/getUniqueChats', controller.getUniqueChats);
+router.get('/getMessages/:userId', controller.getMessages);
+router.post('/sendMessage', controller.sendMessage);
 router.delete('/deleteorder/:id/:pid',controller.deleteorder)
 
 

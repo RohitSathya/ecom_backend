@@ -9,12 +9,12 @@ require('dotenv').config();
 app.use(express.json());
 
 // CORS Configuration
-const corsOptions = {
-  origin: ['https://explorepricing.com', 'https://www.explorepricing.com','https://ecomerce-mern-royo.vercel.app','https://ecomerce-1-2b9c.vercel.app'], // Allow both domains
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-};
+ const corsOptions = {
+   origin: ['https://explorepricing.com', 'https://www.explorepricing.com','https://ecomerce-mern-royo.vercel.app','https://ecomerce-1-2b9c.vercel.app'], // Allow both domains
+   methods: ['GET', 'POST', 'PUT', 'DELETE'],
+   allowedHeaders: ['Content-Type', 'Authorization'],
+   credentials: true,
+ };
 
 // Use CORS middleware with the specified options
 app.use(cors(corsOptions));
@@ -28,6 +28,7 @@ app.get("/", async (req, res) => {
 });
 
 // Connect to MongoDB and start the server
+
 mongoose.connect(process.env.mongo_url)
   .then(() => {
     console.log('Database connected');

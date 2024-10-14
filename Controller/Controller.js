@@ -2,6 +2,57 @@ const cartmodel=require('../Models/CartModel')
 const addressmodel=require('../Models/Addressmodel')
 const usermodel=require('../Models/Usermodel')
 const ordermodel=require('../Models/OrderModel')
+const Chat = require('../Models/ChatModel');
+
+
+// Get all messages for a specific user
+const getUniqueChats = async (req, res) => {
+  try {
+    const chats = await Chat.aggregate([
+      {
+        $group: {
+          _id: '$userId', // Group by userId
+          name: { $first: '$username' }, // Pick the first name in the group
+          phoneno: { $first: '$phoneno' },
+        },
+      },
+    ]);
+    res.json(chats);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching chats' });
+  }
+};
+
+// Get all messages for a specific user
+const getMessages = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const messages = await Chat.find({ userId }).sort({ createdAt: 1 });
+    res.json(messages);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching messages' });
+  }
+};
+
+// Send a new message
+const sendMessage = async (req, res) => {
+  const { userId, message, sender, username } = req.body;
+
+  try {
+    const newMessage = new Chat({
+      userId,
+      message,
+      sender,
+      username,
+    });
+    await newMessage.save();
+    res.json(newMessage);
+  } catch (error) {
+    res.status(500).json({ message: 'Error sending message' });
+  }
+};
+
+
 
 const register=async(req,res)=>{
   const {email}=req.body
@@ -147,21 +198,52 @@ const cartafterorder=async(req,res)=>{
 
 
 }
-const createorder=async(req,res)=>{
+const createorder = async (req, res) => {
+  const { ord } = req.body;
   
-  const{ord}=req.body
-   let co=0
-  for (let x of ord){
-    delete ord[co]._id
-    delete ord[co].createdAt
-    delete ord[co].updatedAt
-    delete ord[co].__v
-     const data=await ordermodel.create(ord[co])
-     co+=1
-  }
-  res.json({m:'s'})
+  // Fetch user's saved address
+  const userId = ord[0].uid;  // Assuming all products have the same user ID
+  const userAddress = await addressmodel.findOne({ uid: userId });
 
-}
+  if (!userAddress) {
+    return res.status(400).json({ message: 'Address not found for the user' });
+  }
+
+  try {
+    // Save each product as a separate order entry with the user's address
+    for (let product of ord) {
+      // Create the order object including the user's address as an array
+      const newOrder = {
+        name: product.name,
+        price: product.price,
+        category: product.category,
+        image: product.image,
+        uid: product.uid,
+        address: [userAddress]  // Add the user's address as an array
+      };
+
+      // Save the new order to the database
+      await ordermodel.create(newOrder);
+    }
+
+    res.json({ m: 's' });
+  } catch (error) {
+    console.error('Error placing order:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+const getallorders = async (req, res) => {
+  try {
+    const orders = await ordermodel.find().sort({updatedAt:-1});
+    if (orders == '' || !orders) {
+      res.json({ message: 'f' });
+    } else {
+      res.json(orders);
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching orders' });
+  }
+};
 const getorder=async(req,res)=>{
   const id=req.params.id
   const data=await ordermodel.find({uid:id})
@@ -187,4 +269,4 @@ const deleteorder=async(req,res)=>{
 }
 
 
-module.exports={register,login,createcart,getcart,deletecart,address,getaddress,updateaddress,cartafterorder,createorder,getorder,deleteorder}
+module.exports={getUniqueChats,getMessages,sendMessage,register,login,createcart,getcart,deletecart,address,getaddress,updateaddress,cartafterorder,createorder,getorder,deleteorder,getallorders}
