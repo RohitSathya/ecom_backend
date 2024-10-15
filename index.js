@@ -4,6 +4,7 @@ const app = express();
 const mongoose = require('mongoose');
 const router = require('./Routes/Routes');
 const pr = require('./Routes/productRoutes');
+const com=require('./Routes/comments')
 require('dotenv').config();
 
 app.use(express.json());
@@ -22,6 +23,7 @@ app.use(cors(corsOptions));
 // Routes
 app.use("/product", router);
 app.use('/pro', pr);
+app.use('/comments',com)
 
 app.get("/", async (req, res) => {
   res.json("hi");
